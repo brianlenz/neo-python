@@ -962,7 +962,13 @@ def main():
     reactor.suggestThreadPoolSize(15)
     reactor.callInThread(cli.run)
     NodeLeader.Instance().Start()
+    # reactor.run() will block until exit/quit is run, at which point the reactor will stop and
+    # graceful shutdown begins
     reactor.run()
+    # once the reactor stops running, shut down the databases gracefully. the order is
+    # important here since the reactor processes the blockchain DB, so if we try to shut
+    # down the database before stopping the reactor, the reactor job will access the DB
+    # after it has been closed, resulting in errors on shutdown.
     NotificationDB.close()
     Blockchain.Default().Dispose()
     NodeLeader.Instance().Shutdown()
