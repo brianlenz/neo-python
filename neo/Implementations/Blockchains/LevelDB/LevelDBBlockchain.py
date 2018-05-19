@@ -444,6 +444,7 @@ class LevelDBBlockchain(Blockchain):
             outhex = binascii.unhexlify(out)
             return Header.FromTrimmedData(outhex, 0)
         except TypeError as e2:
+            logger.info("TypeError in GetHeader %s " % e2)
             pass
         except Exception as e:
             logger.info("OTHER ERRROR %s " % e)
@@ -477,6 +478,8 @@ class LevelDBBlockchain(Blockchain):
             return False
 
         hash = self._header_index[height]
+
+        logger.info("Found hash %s for height %s" % (hash, height))
 
         return self.GetHeader(hash)
 
