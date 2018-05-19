@@ -2,6 +2,8 @@ import time
 import plyvel
 import binascii
 
+import traceback
+
 from logzero import logger
 
 from neo.Core.Blockchain import Blockchain
@@ -445,9 +447,12 @@ class LevelDBBlockchain(Blockchain):
             return Header.FromTrimmedData(outhex, 0)
         except TypeError as e2:
             logger.info("TypeError in GetHeader %s " % e2)
-            pass
+            traceback.print_stack()
+            traceback.print_exc()
         except Exception as e:
             logger.info("OTHER ERRROR %s " % e)
+            traceback.print_stack()
+            traceback.print_exc()
         return None
 
     def GetHeaderBy(self, height_or_hash):
