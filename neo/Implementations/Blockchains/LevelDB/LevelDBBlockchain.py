@@ -808,6 +808,7 @@ class LevelDBBlockchain(Blockchain):
 
             wb.put(DBPrefix.SYS_CurrentBlock, block.Hash.ToBytes() + block.IndexBytes())
             self._current_block_height = block.Index
+            logger.info("Persisted _current_block_height %s" % self._current_block_height)
             self._persisting_block = None
 
             self.TXProcessed += len(block.Transactions)
